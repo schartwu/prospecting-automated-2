@@ -1,0 +1,28 @@
+name: Run Main Dept Bot
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # ตั้งเวลารันอัตโนมัติทุก 17:00 น. เวลาไทย
+  workflow_dispatch: # สร้างปุ่มให้เรากด Manual Run ได้ด้วยตัวเอง
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install pandas requests openpyxl
+
+      - name: Execute Python Script
+        env:
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+        run: python main_rss_feed.py

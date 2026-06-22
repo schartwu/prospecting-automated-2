@@ -53,14 +53,14 @@ def send_email_report(file_path, target_date_str, has_data=True):
     msg['To'] = receiver_email
     
     if has_data:
-        msg['Subject'] = f'🚨 [A/B Test] ประกาศจัดซื้อใหม่ (รหัสหลัก) - {target_date_str}'
-        body_content = "แนบไฟล์รายงานการดึงข้อมูลแบบหว่านแห (เฉพาะรหัสหน่วยงานหลัก)\n\nขอบคุณครับ"
+        msg['Subject'] = f'🚨 ประกาศจัดซื้อใหม่ - {target_date_str}'
+        body_content = "แนบไฟล์รายงานการดึงข้อมูล e-GP\n\nขอบคุณครับ"
         msg.set_content(body_content)
         with open(file_path, 'rb') as f:
             msg.add_attachment(f.read(), maintype='application', subtype='xlsx', filename=os.path.basename(file_path))
     else:
-        msg['Subject'] = f'ℹ️ [A/B Test] ไม่พบข้อมูล (รหัสหลัก) - {target_date_str}'
-        msg.set_content("ตรวจสอบแล้ว ไม่พบประกาศจัดซื้อใหม่ที่ตรงคีย์เวิร์ดครับ")
+        msg['Subject'] = f'ℹ️ ไม่พบข้อมูล - {target_date_str}'
+        msg.set_content("ตรวจสอบแล้ว ไม่พบประกาศจัดซื้อใหม่ใน e-GP ที่ตรงคีย์เวิร์ดครับ")
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
@@ -84,11 +84,11 @@ def send_monthly_summary_report(file_path, month_display):
     msg = EmailMessage()
     msg['From'] = sender_email
     msg['To'] = receiver_email
-    msg['Subject'] = f'📊 [A/B Test Monthly] สรุปประกาศจัดซื้อสะสมเดือน {month_display}'
+    msg['Subject'] = f'📊 สรุปประกาศจัดซื้อสะสมเดือน {month_display}'
     
     body_content = (
         f"เรียน ทีมงาน,\n\n"
-        f"รายงานสรุปข้อมูลประกาศจัดซื้อจัดจ้างสะสม (จากโปรเจกต์ดึงรหัสหลัก) ประจำเดือน {month_display}\n\n"
+        f"รายงานสรุปข้อมูลประกาศจัดซื้อจัดจ้างสะสม ประจำเดือน {month_display}\n\n"
         f"ขอบคุณครับ"
     )
     msg.set_content(body_content)

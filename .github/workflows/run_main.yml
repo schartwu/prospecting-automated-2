@@ -2,9 +2,11 @@ name: Run Main Dept Bot
 
 on:
   schedule:
-    # 0 = นาทีที่ 0 / 10 = 10:00 UTC (17:00 ไทย) / 1-5 = วันจันทร์ถึงศุกร์
     - cron: '0 10 * * 1-5' 
   workflow_dispatch:
+
+permissions:      # <-- เพิ่มบรรทัดนี้
+  contents: write # <-- เพิ่มบรรทัดนี้ เพื่ออนุญาตให้บอทเซฟไฟล์ Excel ทับลงใน Github ได้
 
 jobs:
   run-bot:

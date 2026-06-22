@@ -2,8 +2,9 @@ name: Run Main Dept Bot
 
 on:
   schedule:
-    - cron: '0 10 * * *' # ตั้งเวลารันอัตโนมัติทุก 17:00 น. เวลาไทย
-  workflow_dispatch: # สร้างปุ่มให้เรากด Manual Run ได้ด้วยตัวเอง
+    # 0 = นาทีที่ 0 / 10 = 10:00 UTC (17:00 ไทย) / 1-5 = วันจันทร์ถึงศุกร์
+    - cron: '0 10 * * 1-5' 
+  workflow_dispatch:
 
 jobs:
   run-bot:
@@ -26,3 +27,12 @@ jobs:
           SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
         run: python main_rss_feed.py
+
+      - name: Commit and Push Backup Files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          git add Backup/
+          git commit -m "Auto-update monthly backup (Main Dept)" || echo "No changes to commit"
+          git pull --rebase origin main || echo "No rebase needed"
+          git push origin main || echo "No push needed"
